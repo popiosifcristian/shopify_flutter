@@ -1,5 +1,5 @@
-import 'package:shopify_flutter/models/src/product/shopify_image/shopify_image.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shopify_flutter/models/src/product/shopify_image/shopify_image.dart';
 
 import 'author_v_2/author_v_2.dart';
 import 'comment/comment.dart';
@@ -7,9 +7,8 @@ import 'comment/comment.dart';
 part 'article.freezed.dart';
 part 'article.g.dart';
 
-@freezed
-
 /// The article class
+@freezed
 class Article with _$Article {
   const Article._();
 
@@ -28,6 +27,7 @@ class Article with _$Article {
     final List<String>? tags,
     final String? title,
     final String? onlineStoreUrl,
+    final String? cursor,
   }) = _Article;
 
   /// The article from json
@@ -53,6 +53,7 @@ class Article with _$Article {
         tags: _getTagsList(json),
         title: (json['node'] ?? const {})['title'],
         onlineStoreUrl: (json['node'] ?? const {})['onlineStoreUrl'],
+        cursor: json['cursor'],
       );
 
   static _getCommentList(Map<String, dynamic> json) {
@@ -67,4 +68,8 @@ class Article with _$Article {
     (json['node'] ?? const {})['tags']?.forEach((tag) => tagsList.add(tag));
     return tagsList;
   }
+
+  ///Returns DateTime of publishedAt
+  DateTime? get publishedAtDate =>
+      publishedAt != null ? DateTime.parse(publishedAt!) : null;
 }

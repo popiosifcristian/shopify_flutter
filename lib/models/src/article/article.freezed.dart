@@ -33,6 +33,7 @@ mixin _$Article {
   List<String>? get tags => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get onlineStoreUrl => throw _privateConstructorUsedError;
+  String? get cursor => throw _privateConstructorUsedError;
 
   /// Serializes this Article to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -61,7 +62,8 @@ abstract class $ArticleCopyWith<$Res> {
       String? publishedAt,
       List<String>? tags,
       String? title,
-      String? onlineStoreUrl});
+      String? onlineStoreUrl,
+      String? cursor});
 
   $AuthorV2CopyWith<$Res>? get author;
   $ShopifyImageCopyWith<$Res>? get image;
@@ -95,6 +97,7 @@ class _$ArticleCopyWithImpl<$Res, $Val extends Article>
     Object? tags = freezed,
     Object? title = freezed,
     Object? onlineStoreUrl = freezed,
+    Object? cursor = freezed,
   }) {
     return _then(_value.copyWith(
       author: freezed == author
@@ -149,6 +152,10 @@ class _$ArticleCopyWithImpl<$Res, $Val extends Article>
           ? _value.onlineStoreUrl
           : onlineStoreUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      cursor: freezed == cursor
+          ? _value.cursor
+          : cursor // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -201,7 +208,8 @@ abstract class _$$ArticleImplCopyWith<$Res> implements $ArticleCopyWith<$Res> {
       String? publishedAt,
       List<String>? tags,
       String? title,
-      String? onlineStoreUrl});
+      String? onlineStoreUrl,
+      String? cursor});
 
   @override
   $AuthorV2CopyWith<$Res>? get author;
@@ -235,6 +243,7 @@ class __$$ArticleImplCopyWithImpl<$Res>
     Object? tags = freezed,
     Object? title = freezed,
     Object? onlineStoreUrl = freezed,
+    Object? cursor = freezed,
   }) {
     return _then(_$ArticleImpl(
       author: freezed == author
@@ -289,6 +298,10 @@ class __$$ArticleImplCopyWithImpl<$Res>
           ? _value.onlineStoreUrl
           : onlineStoreUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      cursor: freezed == cursor
+          ? _value.cursor
+          : cursor // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -309,7 +322,8 @@ class _$ArticleImpl extends _Article {
       this.publishedAt,
       final List<String>? tags,
       this.title,
-      this.onlineStoreUrl})
+      this.onlineStoreUrl,
+      this.cursor})
       : _commentList = commentList,
         _tags = tags,
         super._();
@@ -359,10 +373,12 @@ class _$ArticleImpl extends _Article {
   final String? title;
   @override
   final String? onlineStoreUrl;
+  @override
+  final String? cursor;
 
   @override
   String toString() {
-    return 'Article(author: $author, commentList: $commentList, content: $content, contentHtml: $contentHtml, excerpt: $excerpt, excerptHtml: $excerptHtml, handle: $handle, id: $id, image: $image, publishedAt: $publishedAt, tags: $tags, title: $title, onlineStoreUrl: $onlineStoreUrl)';
+    return 'Article(author: $author, commentList: $commentList, content: $content, contentHtml: $contentHtml, excerpt: $excerpt, excerptHtml: $excerptHtml, handle: $handle, id: $id, image: $image, publishedAt: $publishedAt, tags: $tags, title: $title, onlineStoreUrl: $onlineStoreUrl, cursor: $cursor)';
   }
 
   @override
@@ -387,7 +403,8 @@ class _$ArticleImpl extends _Article {
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.onlineStoreUrl, onlineStoreUrl) ||
-                other.onlineStoreUrl == onlineStoreUrl));
+                other.onlineStoreUrl == onlineStoreUrl) &&
+            (identical(other.cursor, cursor) || other.cursor == cursor));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -406,7 +423,8 @@ class _$ArticleImpl extends _Article {
       publishedAt,
       const DeepCollectionEquality().hash(_tags),
       title,
-      onlineStoreUrl);
+      onlineStoreUrl,
+      cursor);
 
   /// Create a copy of Article
   /// with the given fields replaced by the non-null parameter values.
@@ -438,7 +456,8 @@ abstract class _Article extends Article {
       final String? publishedAt,
       final List<String>? tags,
       final String? title,
-      final String? onlineStoreUrl}) = _$ArticleImpl;
+      final String? onlineStoreUrl,
+      final String? cursor}) = _$ArticleImpl;
   _Article._() : super._();
 
   factory _Article.fromJson(Map<String, dynamic> json) = _$ArticleImpl.fromJson;
@@ -469,6 +488,8 @@ abstract class _Article extends Article {
   String? get title;
   @override
   String? get onlineStoreUrl;
+  @override
+  String? get cursor;
 
   /// Create a copy of Article
   /// with the given fields replaced by the non-null parameter values.

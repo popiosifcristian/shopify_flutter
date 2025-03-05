@@ -2,7 +2,11 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shopify_flutter/enums/enums.dart';
 import 'package:shopify_flutter/graphql_operations/storefront/queries/get_all_blogs.dart';
 import 'package:shopify_flutter/graphql_operations/storefront/queries/get_blog_by_handle.dart';
+import 'package:shopify_flutter/graphql_operations/storefront/queries/get_n_article_tags_sorted.dart';
+import 'package:shopify_flutter/graphql_operations/storefront/queries/get_n_article_tags_sorted_after_cursor.dart';
 import 'package:shopify_flutter/graphql_operations/storefront/queries/get_n_articles_sorted.dart';
+import 'package:shopify_flutter/graphql_operations/storefront/queries/get_n_articles_sorted_after_cursor.dart';
+import 'package:shopify_flutter/graphql_operations/storefront/queries/get_n_articles_with_query_sorted.dart';
 import 'package:shopify_flutter/mixins/src/shopify_error.dart';
 import 'package:shopify_flutter/models/src/article/article.dart';
 import 'package:shopify_flutter/models/src/article/articles/articles.dart';
@@ -71,12 +75,14 @@ class ShopifyBlog with ShopifyError {
   Future<List<Article>?> getXArticlesSorted(
     int articleAmount, {
     SortKeyArticle sortKeyArticle = SortKeyArticle.RELEVANCE,
+    bool reverse = false,
   }) async {
     final QueryOptions _options = WatchQueryOptions(
       document: gql(getNArticlesSortedQuery),
       variables: {
         'x': articleAmount,
         'sortKey': sortKeyArticle.parseToString(),
+        'reverse': reverse,
       },
       fetchPolicy: ShopifyConfig.fetchPolicy,
     );
@@ -86,5 +92,150 @@ class ShopifyBlog with ShopifyError {
     return (Articles.fromJson(
             (result.data ?? const {})['articles'] ?? const {}))
         .articleList;
+  }
+
+  /// Returns a List of [Article].
+  ///
+  /// Returns a the first [articleAmount] of [Article] sorted by [sortKeyArticle].
+  /// [articleAmount] has to be in the range of 0 and 250.
+  Future<List<Article>> getXArticlesSortedAfterCursor(
+    int articleAmount,
+    String startCursor, {
+    bool reverse = false,
+    SortKeyArticle sortKeyArticle = SortKeyArticle.RELEVANCE,
+    bool deleteThisPartOfCache = false,
+  }) async {
+    final QueryOptions _options = WatchQueryOptions(
+        document: gql(getNArticlesSortedAfterCursorQuery),
+        variables: {
+          'x': articleAmount,
+          'cursor': startCursor,
+          'reverse': reverse,
+          'sortKey': sortKeyArticle.parseToString(),
+        });
+    final QueryResult result = await _graphQLClient!.query(_options);
+    checkForError(result);
+    if (deleteThisPartOfCache) {
+      _graphQLClient!.cache.writeQuery(_options.asRequest, data: {});
+    }
+    return (Articles.fromGraphJson(
+            (result.data ?? const {})['articles'] ?? const {}))
+        .articleList;
+  }
+
+  // Returns a List of [Article].
+  ///
+  /// Returns the List of [Article] for a given [tag].
+  Future<List<Article>> getXArticlesByTagSorted(
+    String tag,
+    int articleAmount, {
+    bool reverse = false,
+    SortKeyArticle sortKeyArticle = SortKeyArticle.RELEVANCE,
+    bool deleteThisPartOfCache = false,
+  }) async {
+    final QueryOptions _options = WatchQueryOptions(
+        document: gql(getNArticlesWithQuerySortedQuery),
+        variables: {
+          'x': articleAmount,
+          'reverse': reverse,
+          'sortKey': sortKeyArticle.parseToString(),
+          'query': 'tag:"$tag"',
+        });
+    final QueryResult result = await _graphQLClient!.query(_options);
+    checkForError(result);
+    if (deleteThisPartOfCache) {
+      _graphQLClient!.cache.writeQuery(_options.asRequest, data: {});
+    }
+    return (Articles.fromGraphJson(
+            (result.data ?? const {})['articles'] ?? const {}))
+        .articleList;
+  }
+
+  // Returns a List of [Article].
+  ///
+  /// Returns the List of [Article] for a given [tag].
+  Future<List<Article>> getXArticlesByTagSortedAfterCursor(
+    String tag,
+    int articleAmount,
+    String startCursor, {
+    bool reverse = false,
+    SortKeyArticle sortKeyArticle = SortKeyArticle.RELEVANCE,
+    bool deleteThisPartOfCache = false,
+  }) async {
+    final QueryOptions _options = WatchQueryOptions(
+        document: gql(getNArticlesWithQuerySortedQuery),
+        variables: {
+          'x': articleAmount,
+          'cursor': startCursor,
+          'reverse': reverse,
+          'sortKey': sortKeyArticle.parseToString(),
+          'query': 'tag:"$tag"',
+        });
+    final QueryResult result = await _graphQLClient!.query(_options);
+    checkForError(result);
+    if (deleteThisPartOfCache) {
+      _graphQLClient!.cache.writeQuery(_options.asRequest, data: {});
+    }
+    return (Articles.fromGraphJson(
+            (result.data ?? const {})['articles'] ?? const {}))
+        .articleList;
+  }
+
+  /// Returns a List of [String].
+  ///
+  /// Returns all Article tags sorted by [sortKeyArticle].
+  Future<List<String>> getAllArticleTagsSorted({
+    bool reverse = false,
+    SortKeyArticle sortKeyArticle = SortKeyArticle.RELEVANCE,
+    bool deleteThisPartOfCache = false,
+  }) async {
+    const articleAmount = 250;
+
+    final QueryOptions _options = WatchQueryOptions(
+        document: gql(getNArticleTagsSortedQuery),
+        variables: {
+          'x': articleAmount,
+          'reverse': reverse,
+          'sortKey': sortKeyArticle.parseToString(),
+        });
+    final QueryResult result = await _graphQLClient!.query(_options);
+    checkForError(result);
+    if (deleteThisPartOfCache) {
+      _graphQLClient!.cache.writeQuery(_options.asRequest, data: {});
+    }
+
+    var articles = (Articles.fromGraphJson(
+            (result.data ?? const {})['articles'] ?? const {}))
+        .articleList;
+
+    List<String> allTags =
+        articles.expand((e) => e.tags ?? <String>[]).toSet().toList();
+
+    while (articles.length == articleAmount) {
+      final QueryOptions _options = WatchQueryOptions(
+          document: gql(getNArticleTagsSortedAfterCursorQuery),
+          variables: {
+            'x': articleAmount,
+            'cursor': articles.last.cursor,
+            'reverse': reverse,
+            'sortKey': sortKeyArticle.parseToString(),
+          });
+      final QueryResult result = await _graphQLClient!.query(_options);
+      checkForError(result);
+      if (deleteThisPartOfCache) {
+        _graphQLClient!.cache.writeQuery(_options.asRequest, data: {});
+      }
+
+      List<Article> newArticles = (Articles.fromGraphJson(
+              (result.data ?? const {})['articles'] ?? const {}))
+          .articleList;
+
+      allTags.addAll(
+          newArticles.expand((e) => e.tags ?? <String>[]).toSet().toList());
+
+      articles.addAll(newArticles);
+    }
+
+    return allTags;
   }
 }

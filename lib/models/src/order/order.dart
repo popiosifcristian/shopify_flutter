@@ -1,6 +1,6 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shopify_flutter/models/src/order/successful_fulfillment/successful_fullfilment.dart';
 import 'package:shopify_flutter/models/src/product/price_v_2/price_v_2.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'line_items_order/line_items_order.dart';
 import 'shipping_address/shipping_address.dart';
@@ -8,9 +8,8 @@ import 'shipping_address/shipping_address.dart';
 part 'order.freezed.dart';
 part 'order.g.dart';
 
-@freezed
-
 /// The order
+@freezed
 class Order with _$Order {
   const Order._();
 
@@ -85,4 +84,10 @@ class Order with _$Order {
     }
     return list;
   }
+
+  /// Checks if order is refunded
+  bool get isCanceled =>
+      canceledAt != null ||
+      financialStatus == 'REFUNDED' ||
+      financialStatus == 'PARTIALLY_REFUNDED';
 }

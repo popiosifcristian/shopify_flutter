@@ -23,6 +23,7 @@ mixin _$Shop {
   String? get description => throw _privateConstructorUsedError;
   String? get moneyFormat => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
+  String? get customerAccounts => throw _privateConstructorUsedError;
   PaymentSettings? get paymentSettings => throw _privateConstructorUsedError;
   PrimaryDomain? get primaryDomain => throw _privateConstructorUsedError;
   PrivacyPolicy? get privacyPolicy => throw _privateConstructorUsedError;
@@ -51,6 +52,7 @@ abstract class $ShopCopyWith<$Res> {
       {String? description,
       String? moneyFormat,
       String? name,
+      String? customerAccounts,
       PaymentSettings? paymentSettings,
       PrimaryDomain? primaryDomain,
       PrivacyPolicy? privacyPolicy,
@@ -87,6 +89,7 @@ class _$ShopCopyWithImpl<$Res, $Val extends Shop>
     Object? description = freezed,
     Object? moneyFormat = freezed,
     Object? name = freezed,
+    Object? customerAccounts = freezed,
     Object? paymentSettings = freezed,
     Object? primaryDomain = freezed,
     Object? privacyPolicy = freezed,
@@ -108,6 +111,10 @@ class _$ShopCopyWithImpl<$Res, $Val extends Shop>
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerAccounts: freezed == customerAccounts
+          ? _value.customerAccounts
+          : customerAccounts // ignore: cast_nullable_to_non_nullable
               as String?,
       paymentSettings: freezed == paymentSettings
           ? _value.paymentSettings
@@ -255,6 +262,7 @@ abstract class _$$ShopImplCopyWith<$Res> implements $ShopCopyWith<$Res> {
       {String? description,
       String? moneyFormat,
       String? name,
+      String? customerAccounts,
       PaymentSettings? paymentSettings,
       PrimaryDomain? primaryDomain,
       PrivacyPolicy? privacyPolicy,
@@ -295,6 +303,7 @@ class __$$ShopImplCopyWithImpl<$Res>
     Object? description = freezed,
     Object? moneyFormat = freezed,
     Object? name = freezed,
+    Object? customerAccounts = freezed,
     Object? paymentSettings = freezed,
     Object? primaryDomain = freezed,
     Object? privacyPolicy = freezed,
@@ -316,6 +325,10 @@ class __$$ShopImplCopyWithImpl<$Res>
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerAccounts: freezed == customerAccounts
+          ? _value.customerAccounts
+          : customerAccounts // ignore: cast_nullable_to_non_nullable
               as String?,
       paymentSettings: freezed == paymentSettings
           ? _value.paymentSettings
@@ -360,6 +373,7 @@ class _$ShopImpl implements _Shop {
       {this.description,
       this.moneyFormat,
       this.name,
+      this.customerAccounts,
       this.paymentSettings,
       this.primaryDomain,
       this.privacyPolicy,
@@ -379,6 +393,8 @@ class _$ShopImpl implements _Shop {
   final String? moneyFormat;
   @override
   final String? name;
+  @override
+  final String? customerAccounts;
   @override
   final PaymentSettings? paymentSettings;
   @override
@@ -407,7 +423,7 @@ class _$ShopImpl implements _Shop {
 
   @override
   String toString() {
-    return 'Shop(description: $description, moneyFormat: $moneyFormat, name: $name, paymentSettings: $paymentSettings, primaryDomain: $primaryDomain, privacyPolicy: $privacyPolicy, refundPolicy: $refundPolicy, shippingPolicy: $shippingPolicy, subscriptionPolicy: $subscriptionPolicy, shipsToCountries: $shipsToCountries, termsOfService: $termsOfService)';
+    return 'Shop(description: $description, moneyFormat: $moneyFormat, name: $name, customerAccounts: $customerAccounts, paymentSettings: $paymentSettings, primaryDomain: $primaryDomain, privacyPolicy: $privacyPolicy, refundPolicy: $refundPolicy, shippingPolicy: $shippingPolicy, subscriptionPolicy: $subscriptionPolicy, shipsToCountries: $shipsToCountries, termsOfService: $termsOfService)';
   }
 
   @override
@@ -420,6 +436,8 @@ class _$ShopImpl implements _Shop {
             (identical(other.moneyFormat, moneyFormat) ||
                 other.moneyFormat == moneyFormat) &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.customerAccounts, customerAccounts) ||
+                other.customerAccounts == customerAccounts) &&
             (identical(other.paymentSettings, paymentSettings) ||
                 other.paymentSettings == paymentSettings) &&
             (identical(other.primaryDomain, primaryDomain) ||
@@ -445,6 +463,7 @@ class _$ShopImpl implements _Shop {
       description,
       moneyFormat,
       name,
+      customerAccounts,
       paymentSettings,
       primaryDomain,
       privacyPolicy,
@@ -475,6 +494,7 @@ abstract class _Shop implements Shop {
       {final String? description,
       final String? moneyFormat,
       final String? name,
+      final String? customerAccounts,
       final PaymentSettings? paymentSettings,
       final PrimaryDomain? primaryDomain,
       final PrivacyPolicy? privacyPolicy,
@@ -492,6 +512,8 @@ abstract class _Shop implements Shop {
   String? get moneyFormat;
   @override
   String? get name;
+  @override
+  String? get customerAccounts;
   @override
   PaymentSettings? get paymentSettings;
   @override
