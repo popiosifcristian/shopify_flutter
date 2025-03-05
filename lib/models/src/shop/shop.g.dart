@@ -10,6 +10,7 @@ _$ShopImpl _$$ShopImplFromJson(Map<String, dynamic> json) => _$ShopImpl(
       description: json['description'] as String?,
       moneyFormat: json['moneyFormat'] as String?,
       name: json['name'] as String?,
+      customerAccounts: json['customerAccounts'] as String?,
       paymentSettings: json['paymentSettings'] == null
           ? null
           : PaymentSettings.fromJson(
@@ -47,6 +48,7 @@ Map<String, dynamic> _$$ShopImplToJson(_$ShopImpl instance) =>
       'description': instance.description,
       'moneyFormat': instance.moneyFormat,
       'name': instance.name,
+      'customerAccounts': instance.customerAccounts,
       'paymentSettings': instance.paymentSettings?.toJson(),
       'primaryDomain': instance.primaryDomain?.toJson(),
       'privacyPolicy': instance.privacyPolicy?.toJson(),

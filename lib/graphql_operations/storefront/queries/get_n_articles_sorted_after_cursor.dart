@@ -1,7 +1,7 @@
-/// Query to get n articles sorted
-const String getNArticlesSortedQuery = r'''
-query($x : Int, $sortKey : ArticleSortKeys, $reverse: Boolean){
-  articles(first: $x, sortKey: $sortKey, reverse: $reverse) {
+/// Query to get articles paginated
+const String getNArticlesSortedAfterCursorQuery = r'''
+query($x : Int, $cursor: String, $sortKey : ArticleSortKeys, $reverse: Boolean){
+  articles(first: $x, after: $cursor, sortKey: $sortKey, reverse: $reverse) {
     edges {
       cursor
       node {
@@ -39,7 +39,6 @@ query($x : Int, $sortKey : ArticleSortKeys, $reverse: Boolean){
         publishedAt
         tags
         title
-        url
       }
     }
   }

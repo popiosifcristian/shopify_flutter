@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shopify_flutter/enums/enums.dart';
 import 'package:shopify_flutter/graphql_operations/storefront/queries/get_all_collections_optimized.dart';
 import 'package:shopify_flutter/graphql_operations/storefront/queries/get_all_products_from_collection_by_id.dart';
@@ -10,18 +11,19 @@ import 'package:shopify_flutter/graphql_operations/storefront/queries/get_produc
 import 'package:shopify_flutter/graphql_operations/storefront/queries/get_products_by_ids.dart';
 import 'package:shopify_flutter/graphql_operations/storefront/queries/get_shop.dart';
 import 'package:shopify_flutter/graphql_operations/storefront/queries/get_x_collections_and_n_products_sorted.dart';
+import 'package:shopify_flutter/graphql_operations/storefront/queries/get_x_collections_on_querry_after_cursor.dart';
 import 'package:shopify_flutter/graphql_operations/storefront/queries/get_x_products_after_cursor.dart';
 import 'package:shopify_flutter/graphql_operations/storefront/queries/get_x_products_after_cursor_within_collection.dart';
-import 'package:shopify_flutter/graphql_operations/storefront/queries/search_product.dart';
 import 'package:shopify_flutter/graphql_operations/storefront/queries/get_x_products_on_query_after_cursor.dart';
+import 'package:shopify_flutter/graphql_operations/storefront/queries/search_product.dart';
 import 'package:shopify_flutter/mixins/src/shopify_error.dart';
 import 'package:shopify_flutter/models/src/collection/collections/collections.dart';
 import 'package:shopify_flutter/models/src/product/metafield_identifier/metafield_identifier.dart';
 import 'package:shopify_flutter/models/src/product/product.dart';
 import 'package:shopify_flutter/models/src/product/products/products.dart';
 import 'package:shopify_flutter/models/src/shop/shop.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shopify_flutter/shopify/src/shopify_localization.dart';
+
 import '../../graphql_operations/storefront/queries/get_featured_collections.dart';
 import '../../graphql_operations/storefront/queries/get_n_products.dart';
 import '../../graphql_operations/storefront/queries/get_products.dart';
@@ -271,6 +273,35 @@ class ShopifyStore with ShopifyError {
       log(e.toString());
     }
     return [Collection.fromJson({})];
+  }
+
+  /// Returns a List of [Collection].
+  ///
+  /// Returns the first [limit] Products after the given [startCursor].
+  /// [limit] has to be in the range of 0 and 250.
+  Future<List<Collection>> getXCollectionOnQueryAfterCursor(
+    String? query,
+    int limit,
+    String? cursor, {
+    bool deleteThisPartOfCache = false,
+    bool reverse = false,
+  }) async {
+    final WatchQueryOptions _options = WatchQueryOptions(
+        document: gql(getXCollectionsOnQueryAfterCursorQuery),
+        variables: {
+          'cursor': cursor,
+          'limit': limit,
+          'query': query ?? '',
+          'reverse': reverse
+        });
+    final QueryResult result =
+        await ShopifyConfig.graphQLClient!.query(_options);
+    checkForError(result);
+    if (deleteThisPartOfCache) {
+      _graphQLClient!.cache.writeQuery(_options.asRequest, data: {});
+    }
+    return Collections.fromGraphJson((result.data ?? const {})['collections'])
+        .collectionList;
   }
 
   /// Returns the Shop.

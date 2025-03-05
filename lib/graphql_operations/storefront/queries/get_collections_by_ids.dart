@@ -22,6 +22,7 @@ query getCollectionsByIds($metafields: [HasMetafieldsIdentifier!]!, $ids: [ID!]!
         }
       }
       handle
+      description
       descriptionHtml
       image {
         src

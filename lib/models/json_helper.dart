@@ -41,8 +41,8 @@ class JsonHelper {
         ? null
         : json is String
             ? double.parse(json)
-            : json is double
-                ? json
+            : json is num
+                ? json + .0
                 : json['amount'] is String
                     ? double.parse(json['amount'])
                     : json['amount'];

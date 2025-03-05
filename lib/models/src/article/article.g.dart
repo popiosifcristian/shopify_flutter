@@ -27,6 +27,7 @@ _$ArticleImpl _$$ArticleImplFromJson(Map<String, dynamic> json) =>
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
       title: json['title'] as String?,
       onlineStoreUrl: json['onlineStoreUrl'] as String?,
+      cursor: json['cursor'] as String?,
     );
 
 Map<String, dynamic> _$$ArticleImplToJson(_$ArticleImpl instance) =>
@@ -44,4 +45,5 @@ Map<String, dynamic> _$$ArticleImplToJson(_$ArticleImpl instance) =>
       'tags': instance.tags,
       'title': instance.title,
       'onlineStoreUrl': instance.onlineStoreUrl,
+      'cursor': instance.cursor,
     };

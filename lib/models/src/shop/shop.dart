@@ -11,15 +11,15 @@ import 'terms_of_service/terms_of_service.dart';
 part 'shop.freezed.dart';
 part 'shop.g.dart';
 
-@freezed
-
 /// The shop
+@freezed
 class Shop with _$Shop {
   /// The shop factory constructor
   factory Shop({
     String? description,
     String? moneyFormat,
     String? name,
+    String? customerAccounts,
     PaymentSettings? paymentSettings,
     PrimaryDomain? primaryDomain,
     PrivacyPolicy? privacyPolicy,
