@@ -89,7 +89,7 @@ class ShopifyBlog with ShopifyError {
     final QueryResult result = await _graphQLClient!.query(_options);
     checkForError(result);
 
-    return (Articles.fromJson(
+    return (Articles.fromGraphJson(
             (result.data ?? const {})['articles'] ?? const {}))
         .articleList;
   }
