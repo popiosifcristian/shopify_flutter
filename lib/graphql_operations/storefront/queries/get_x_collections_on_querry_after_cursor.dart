@@ -13,7 +13,7 @@ query( $cursor: String, $limit : Int, $query: String, $reverse: Boolean){
         image {
           altText
           id
-          url
+          originalSrc
         }
       }
       cursor
