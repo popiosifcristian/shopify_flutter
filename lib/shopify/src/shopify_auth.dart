@@ -65,6 +65,14 @@ class ShopifyAuth with ShopifyError {
   Future<String?> get currentCustomerAccessToken async {
     final data = await accessTokenWithExpDate;
     final String? accessToken = data?.accessToken;
+
+    // Check if token is expired first
+    if (await isAccessTokenExpired) {
+      log('[ShopifyAuth] Token is expired, signing out user');
+      await signOutCurrentUser();
+      return null;
+    }
+
     if (await _isTokenNotExpiredButAboutToExpire(data)) {
       try {
         final updatedAccessToken = await _renewAccessToken(
@@ -74,9 +82,18 @@ class ShopifyAuth with ShopifyError {
           updatedAccessToken,
           _shopifyUser[ShopifyConfig.storeUrl],
         );
+        log('[ShopifyAuth] Token successfully renewed');
         return updatedAccessToken.accessToken;
       } catch (e) {
-        log('Error renewing token: $e');
+        log('[ShopifyAuth] Error renewing token: $e');
+        // Check if token is now expired after failed renewal
+        if (await isAccessTokenExpired) {
+          log('[ShopifyAuth] Token expired after failed renewal, signing out user');
+          await signOutCurrentUser();
+          return null;
+        }
+        // If not expired yet, return current token but log warning
+        log('[ShopifyAuth] Warning: Token renewal failed but token not yet expired, continuing with current token');
       }
     }
     return accessToken;
@@ -252,7 +269,7 @@ class ShopifyAuth with ShopifyError {
   /// Signs out the current user and clears it from the disk cache.
   Future<void> signOutCurrentUser() async {
     if (await isAccessTokenExpired) {
-      log('currentCustomerAccessTokenExpired');
+      log('[ShopifyAuth] currentCustomerAccessTokenExpired');
       await _setShopifyUser(null, null);
       return;
     }

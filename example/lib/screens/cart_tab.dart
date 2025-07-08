@@ -4,7 +4,6 @@ import 'dart:math' hide log;
 import 'package:example/extension.dart';
 import 'package:example/screens/checkout_webview.dart';
 import 'package:flutter/material.dart';
-import 'package:shopify_flutter/mixins/src/shopify_error.dart';
 import 'package:shopify_flutter/models/src/cart/inputs/attribute_input/attribute_input.dart';
 import 'package:shopify_flutter/shopify_flutter.dart';
 
